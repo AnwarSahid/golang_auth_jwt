@@ -41,3 +41,46 @@ func UserRegister(c *gin.Context) {
 		},
 	})
 }
+func Login(c *gin.Context) {
+
+	db := database.GetDB()
+
+	contentType := helpers.GetContentType(c)
+	_, _ = db, contentType
+
+	User := models.User{}
+	password := ""
+
+	if contentType == appJson {
+		c.ShouldBindJSON(&User)
+	} else {
+		c.ShouldBind(&User)
+	}
+
+	password = User.Password
+
+	err := db.Debug().Where("email = ?", User.Email).Take(&User).Error
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "unauthorized",
+			"message": " Invalid username, password ",
+		})
+		return
+	}
+
+	comparePass := helpers.ComparePassword([]byte(User.Password), []byte(password))
+
+	if !comparePass {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "unautorize",
+			"message": "invalid email/password",
+		})
+		return
+	}
+
+	token := helpers.GenerateToken(User.ID, User.Email)
+	c.JSON(http.StatusOK, gin.H{
+		"status": "ok",
+		"token":  token,
+	})
+}

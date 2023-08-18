@@ -12,6 +12,7 @@ func StartServer() *gin.Engine {
 	userRouter := router.Group("/users")
 	{
 		userRouter.POST("/register", controllers.UserRegister)
+		userRouter.POST("/login", controllers.Login)
 	}
 
 	return router
