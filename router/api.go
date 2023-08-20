@@ -14,6 +14,11 @@ func StartServer() *gin.Engine {
 		userRouter.POST("/register", controllers.UserRegister)
 		userRouter.POST("/login", controllers.Login)
 	}
+	// middlewareRouter := router.Group("/testing")
+	// {
+	// 	middlewareRouter.Use(middleware.Authorization())
+	// 	middlewareRouter.GET("/test", controllers.VerifyToken)
+	// }
 
 	return router
 }
