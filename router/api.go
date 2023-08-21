@@ -2,6 +2,7 @@ package router
 
 import (
 	"golang_jwt/controllers"
+	"golang_jwt/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,5 +16,10 @@ func StartServer() *gin.Engine {
 		userRouter.POST("/login", controllers.Login)
 	}
 
+	productRouter := router.Group("/products")
+	{
+		productRouter.Use(middleware.Authorization())
+		productRouter.POST("/", controllers.CreateProduct)
+	}
 	return router
 }

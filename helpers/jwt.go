@@ -25,7 +25,7 @@ func GenerateToken(id uint, email string) string {
 func VerifyToken(c *gin.Context) (interface{}, error) {
 	errResponse := errors.New("Please Login First")
 	headerToken := c.Request.Header.Get("Authorization")
-	barear := strings.HasPrefix(headerToken, "barier")
+	barear := strings.HasPrefix(headerToken, "Bearer")
 
 	if !barear {
 		return nil, errResponse
