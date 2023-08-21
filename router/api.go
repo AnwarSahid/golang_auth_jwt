@@ -18,8 +18,9 @@ func StartServer() *gin.Engine {
 
 	productRouter := router.Group("/products")
 	{
-		productRouter.Use(middleware.Authorization())
+		productRouter.Use(middleware.Authentication())
 		productRouter.POST("/", controllers.CreateProduct)
+		productRouter.PUT("/:productId", middleware.ProductAuthorization(), controllers.UpdateProduct)
 	}
 	return router
 }
